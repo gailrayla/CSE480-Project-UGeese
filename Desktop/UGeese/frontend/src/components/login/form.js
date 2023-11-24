@@ -46,7 +46,7 @@ export default function Form({
                 <div className='mt-8 flex justify-center items-center'>
                     <p className='font-medium text-base'>Don't have an account?</p>
                     <button 
-                        onClick={() => setAuthState('register')}
+                        onClick={() => setAuthState('signup')}
                         className='ml-2 font-medium text-base text-blue-500'>Sign up</button>
                 </div>
             </div>
