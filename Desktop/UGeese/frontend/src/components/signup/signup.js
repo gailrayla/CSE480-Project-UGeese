@@ -9,10 +9,7 @@ export default function SignUpForm({ setUser, setAuthState }) {
     const [department, setDepartment] = React.useState('');
 
     const handleSignUp = () => {
-        // Add your sign-up logic here
-        // You may want to validate input fields and handle user creation
-        // setUser(newUser); // Example: set the user after successful signup
-        // setAuthState('login'); // Example: switch to the login page after signup
+        // Add sign-up logic here
     };
 
     return (
