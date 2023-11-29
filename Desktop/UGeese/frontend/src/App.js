@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import SigninForm from './auth/forms/signin';
 import SignUpForm from './auth/forms/signup';
 import Sidebar from './shared/sidebar';
@@ -75,32 +75,47 @@ const Home = () => {
       );
     };
   
-    function App() {
-      const [isSidebarOpen, setSidebarOpen] = useState(false);
-    
-      const toggleSidebar = () => {
-        setSidebarOpen(!isSidebarOpen);
-      };
-    
-      return (
-        <div>
-          <div className={`flex ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-            {/* Render the Sidebar component with the toggleSidebar function */}
-            <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
-    
-            <div className="main-content items-center justify-center h-screen flex-1">
-              <Routes>
-                {/* Public routes are login and sign up */}
-                <Route path="/sign-in" element={<SigninForm />} />
-                <Route path="/sign-up" element={<SignUpForm />} />
-    
-                {/* Private routes are what we see after sign in */}
-                <Route path="/home" element={<Home />} />
-              </Routes>
-            </div>
-          </div>
+    // Assuming SigninForm and SignUpForm are similar components
+const AuthForm = ({ children }) => {
+  return (
+    <div className="flex items-center justify-center h-screen">
+      {children}
+    </div>
+  );
+};
+
+// Your App component remains mostly unchanged
+function App() {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+  const location = useLocation();
+  const isAuthRoute =
+    location.pathname === '/sign-in' || location.pathname === '/sign-up';
+
+  return (
+    <div>
+      <div className={`flex ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+        {!isAuthRoute && <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />}
+
+        <div className="main-content flex-1">
+          <Routes>
+            <Route
+              path="/sign-in"
+              element={<AuthForm><SigninForm /></AuthForm>}
+            />
+            <Route
+              path="/sign-up"
+              element={<AuthForm><SignUpForm /></AuthForm>}
+            />
+            <Route path="/home" element={<Home />} />
+          </Routes>
         </div>
-      );
-    }
-    
-    export default App;
+      </div>
+    </div>
+  );
+}
+
+export default App;
