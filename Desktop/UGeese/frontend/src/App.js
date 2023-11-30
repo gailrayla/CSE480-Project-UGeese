@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useContext } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import SigninForm from './auth/forms/signin';
 import SignUpForm from './auth/forms/signup';
 import Sidebar from './shared/sidebar';
+import SettingsPage from './shared/SettingsPage';
 
 import Button from './components/Button';
 import CountdownAnimation from './components/CountdownAnimation'; // Adjust the import path
@@ -87,10 +88,20 @@ const AuthForm = ({ children }) => {
 // Your App component remains mostly unchanged
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isSettingsOpen, setSettingsOpen] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
+
+  const openSettings = () => {
+    setSettingsOpen(true);
+  };
+
+  const closeSettings = () => {
+    setSettingsOpen(false);
+  };
+
   const location = useLocation();
   const isAuthRoute =
     location.pathname === '/sign-in' || location.pathname === '/sign-up';
@@ -98,7 +109,7 @@ function App() {
   return (
     <div>
       <div className={`flex ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        {!isAuthRoute && <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />}
+        {!isAuthRoute && <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} openSettings={openSettings} />}
 
         <div className="main-content flex-1">
           <Routes>
@@ -110,7 +121,20 @@ function App() {
               path="/sign-up"
               element={<AuthForm><SignUpForm /></AuthForm>}
             />
-            <Route path="/home" element={<Home />} />
+            <Route
+              path="/home"
+              element={<Home openSettings={openSettings} />}
+            />
+            <Route
+              path="/settings"
+              element={
+                isSettingsOpen ? (
+                  <SettingsPage closeSettings={closeSettings} />
+                ) : (
+                  <Navigate to="/home" />
+                )
+              }
+            />
           </Routes>
         </div>
       </div>
