@@ -115,19 +115,34 @@ export default function SigninForm({ setUser, setAuthState }) {
   );
 }
 
-// Placeholder for the sign-in API call
 const signInApiCall = async ({ email, password }) => {
-  // Replace this with your actual sign-in API call logic
-  // Example: Make a fetch call to your authentication endpoint
-  // For simplicity, we'll assume a successful response with a mock user
-  const userData = {
-    id: 1,
-    username: 'exampleUser',
-    // Add other user information as needed
-  };
+  try {
+    const response = await fetch('http://localhost:5001/user/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-  return {
-    success: true,
-    userData,
-  };
+    const data = await response.json();
+
+    if (response.ok) {
+      return {
+        success: true,
+        userData: data.userData,
+      };
+    } else {
+      return {
+        success: false,
+        error: data.error || 'Sign-in failed',
+      };
+    }
+  } catch (error) {
+    console.error('Error during sign-in:', error);
+    return {
+      success: false,
+      error: 'Internal Server Error',
+    };
+  }
 };

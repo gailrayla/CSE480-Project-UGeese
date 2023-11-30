@@ -8,9 +8,51 @@ export default function SignUpForm({ setUser, setAuthState }) {
     const [studentId, setStudentId] = React.useState('');
     const [department, setDepartment] = React.useState('');
 
-    const handleSignUp = () => {
-        // Add sign-up logic here
-    };
+    const signUpApiCall = async ({
+        firstName,
+        lastName,
+        email,
+        password,
+        studentId,
+        department,
+      }) => {
+        try {
+          const response = await fetch('http://localhost:5001/user/signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              firstName,
+              lastName,
+              email,
+              password,
+              studentId,
+              department,
+            }),
+          });
+      
+          const data = await response.json();
+      
+          if (response.ok) {
+            return {
+              success: true,
+              userData: data,
+            };
+          } else {
+            return {
+              success: false,
+              error: data.error || 'Sign-up failed',
+            };
+          }
+        } catch (error) {
+          console.error('Error during sign-up:', error);
+          return {
+            success: false,
+            error: 'Internal Server Error',
+          };
+        }
+      };
 
     const handleGoogleSignUp = () => {
         // Add Google sign-up logic here
