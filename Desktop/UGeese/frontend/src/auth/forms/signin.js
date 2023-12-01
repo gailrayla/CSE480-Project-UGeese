@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default function SigninForm({ setUser, setAuthState }) {
+export default function SigninForm({ setUser, setAuthState, navigate }) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -17,8 +17,8 @@ export default function SigninForm({ setUser, setAuthState }) {
         // Set authentication state to 'authenticated'
         setAuthState('authenticated');
 
-        // Redirect to the home page
-        // navigate('/home'); // You can uncomment this line if you're using navigation
+        navigate('/home');
+
       } else {
         // Handle sign-in failure (show error message, etc.)
         console.error('Sign-in failed:', response.error);

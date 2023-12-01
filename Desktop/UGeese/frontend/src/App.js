@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext } from 'react';
 
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import SigninForm from './auth/forms/signin';
 import SignUpForm from './auth/forms/signup';
 
@@ -12,6 +12,7 @@ import Button from './components/Button';
 import CountdownAnimation from './components/CountdownAnimation'; // Adjust the import path
 import SetPomodoro from './components/SetPomodoro'; // Adjust the import path
 import { SettingsContext } from './context/settingsContext';
+
 
 const Home = () => {
 
@@ -92,6 +93,8 @@ const AuthForm = ({ children }) => {
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [authState, setAuthState] = useState(''); // Add this line
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -109,20 +112,32 @@ function App() {
   const isAuthRoute =
     location.pathname === '/sign-in' || location.pathname === '/sign-up';
 
+  const handleLogin = () => {
+    setAuthState('login');
+    navigate('/sign-in');
+  };
+
+  const handleSignUp = () => {
+    setAuthState('signup');
+    navigate('/sign-up');
+  };
+
   return (
     <div>
       <div className={`flex ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        {!isAuthRoute && <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} openSettings={openSettings} />}
+        {!isAuthRoute && (
+          <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} openSettings={openSettings} />
+        )}
 
         <div className="main-content flex-1">
           <Routes>
             <Route
               path="/sign-in"
-              element={<AuthForm><SigninForm /></AuthForm>}
+              element={<AuthForm><SigninForm setAuthState={setAuthState} /></AuthForm>}
             />
             <Route
               path="/sign-up"
-              element={<AuthForm><SignUpForm /></AuthForm>}
+              element={<AuthForm><SignUpForm setAuthState={setAuthState} /></AuthForm>}
             />
             <Route
               path="/home"
@@ -142,6 +157,17 @@ function App() {
           </Routes>
         </div>
       </div>
+      {!isAuthRoute && (
+        <div className='mt-8 flex justify-center items-center'>
+          <p className='font-medium text-base'>Already have an account?</p>
+          <button
+            onClick={handleLogin}
+            className='ml-2 font-medium text-base text-blue-500'
+          >
+            Login
+          </button>
+        </div>
+      )}
     </div>
   );
 }

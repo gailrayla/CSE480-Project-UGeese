@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpForm({ setUser, setAuthState }) {
+    const navigate = useNavigate();
+
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -15,48 +18,80 @@ export default function SignUpForm({ setUser, setAuthState }) {
         password,
         studentId,
         department,
-      }) => {
+    }) => {
         try {
-          const response = await fetch('http://localhost:5001/user/signup', {
-            method: 'POST',  
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              firstName,
-              lastName,
-              email,
-              password,
-              studentId,
-              department,
-            }),
-          });
-      
-          const data = await response.json();
-      
-          if (response.ok) {
+            const response = await fetch('http://localhost:5001/user/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    studentId,
+                    department,
+                }),
+            });
+    
+            if (!response.ok) {
+                // Handle error cases here
+                const errorData = await response.json();
+                console.error('Sign-up error:', errorData.error || 'Unknown error');
+                return {
+                    success: false,
+                    error: errorData.error || 'Sign-up failed',
+                };
+            }
+    
+            const data = await response.json();
             return {
-              success: true,
-              userData: data,
+                success: true,
+                userData: data,
             };
-          } else {
-            return {
-              success: false,
-              error: data.error || 'Sign-up failed',
-            };
-          }
         } catch (error) {
-          console.error('Error during sign-up:', error);
-          return {
-            success: false,
-            error: 'Internal Server Error',
-          };
+            console.error('Error during sign-up:', error);
+            return {
+                success: false,
+                error: 'Internal Server Error',
+            };
         }
-      };
+    };
+    
+    const handleSignUp = async () => {
+        console.log('Handle Sign Up clicked'); // Check if this log appears
+    
+        // Await the signUpApiCall function
+        const result = await signUpApiCall({
+            firstName,
+            lastName,
+            email,
+            password,
+            studentId,
+            department,
+        });
+    
+        // Handle the result as needed
+        if (result.success) {
+            // User signed up successfully, you might want to perform additional actions
+            console.log('Sign-up successful:', result.userData);
+        } else {
+            // Handle sign-up failure
+            console.error('Sign-up failed:', result.error);
+        }
+    };
+    
 
     const handleGoogleSignUp = () => {
         // Add Google sign-up logic here
     };
+
+    const handleLogin = () => {
+        console.log('Login button clicked');
+        setAuthState('login');
+        navigate('/sign-in');
+      };
 
     return (
         <div className='w-11/12 max-w-[700px] px-10 py-20 rounded-3xl bg-white border-2 border-gray-100'>
@@ -126,18 +161,11 @@ export default function SignUpForm({ setUser, setAuthState }) {
             </div>
             <div className='mt-8 flex justify-center items-center'>
             <button
-    onClick={() => signUpApiCall({
-        firstName,
-        lastName,
-        email,
-        password,
-        studentId,
-        department,
-    })}
-    className='w-full active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out transform py-4 bg-blue-500 rounded-xl text-white font-bold text-lg'
->
-    Sign up
-</button>
+                    onClick={handleSignUp}
+                    className='w-full active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out transform py-4 bg-blue-500 rounded-xl text-white font-bold text-lg'
+                >
+                    Sign up
+                </button>
 
             </div>
             <div className='mt-8 flex flex-col gap-y-4'>
@@ -158,11 +186,11 @@ export default function SignUpForm({ setUser, setAuthState }) {
             <div className='mt-8 flex justify-center items-center'>
                 <p className='font-medium text-base'>Already have an account?</p>
                 <button
-                    onClick={() => setAuthState('login')}
-                    className='ml-2 font-medium text-base text-blue-500'
-                >
-                    Login
-                </button>
+        onClick={handleLogin}  // Update this line to call handleLogin
+        className='ml-2 font-medium text-base text-blue-500'
+      >
+        Login
+      </button>
             </div>
         </div>
     );

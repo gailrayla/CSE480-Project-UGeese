@@ -10,6 +10,11 @@ const challengesRoutes = require('./routes/challengesRoutes');
 
 const mongoose = require('mongoose');
 const uri = "mongodb+srv://ugeese:ugeesepass@ugeese.10qe9tz.mongodb.net/?retryWrites=true&w=majority";
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
 
 // Import the User model
 const User = require('./models/User');
