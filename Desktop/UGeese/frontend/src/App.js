@@ -119,12 +119,26 @@ function App() {
     navigate('/sign-in');
   };
 
+  const handleLogout = () => {
+    // Assuming you have a state variable to manage authentication state
+    setAuthState('logged out');
+
+    setUser(null);
+
+    // Redirect to the sign-in page
+    navigate('/sign-in');
+  };
 
   return (
     <div>
       <div className={`flex ${isSidebarOpen ? 'sidebar-open' : ''}`}>
         {!isAuthRoute && (
-          <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} openSettings={openSettings} />
+          <Sidebar
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            openSettings={openSettings}
+            handleLogout={handleLogout} // Pass the handleLogout function
+          />
         )}
 
         <div className="main-content flex-1">
@@ -155,17 +169,6 @@ function App() {
           </Routes>
         </div>
       </div>
-      {!isAuthRoute && (
-        <div className='mt-8 flex justify-center items-center'>
-          <p className='font-medium text-base'>Already have an account?</p>
-          <button
-            onClick={handleLogin}
-            className='ml-2 font-medium text-base text-blue-500'
-          >
-            Login
-          </button>
-        </div>
-      )}
     </div>
   );
 }

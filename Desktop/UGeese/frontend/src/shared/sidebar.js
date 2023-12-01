@@ -1,8 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaBars, FaUser, FaCog, FaChartBar, FaShoppingCart } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaBars, FaUser, FaCog, FaChartBar, FaShoppingCart, FaSignOutAlt } from 'react-icons/fa';
 
-const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings }) => {
+
+
+const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings, handleLogout }) => {
+  const navigate = useNavigate();
+
+  const handleLogoutClick = () => {
+    // Perform any additional logout logic here
+    handleLogout();
+
+    // Redirect to the sign-in page
+    navigate('/sign-in');
+  };
+
+
   return (
     <div className={`sidebar ${isSidebarOpen ? 'bg-yellow-200' : ''} text-black h-screen`}>
       <button onClick={toggleSidebar} className="sidebar-toggle p-4 focus:outline-none">
@@ -35,6 +48,12 @@ const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings }) => {
             </a>
           </li>
         </ul>
+        <div className="absolute bottom-4 left-4"> 
+        <button className="flex items-center p-2 hover:bg-yellow-400" onClick={handleLogoutClick}>
+        <FaSignOutAlt className="mr-2 text-black" />
+          Logout
+        </button>
+        </div>
       </nav>
     </div>
   );
