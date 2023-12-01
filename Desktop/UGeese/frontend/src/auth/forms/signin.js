@@ -1,6 +1,9 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function SigninForm({ setUser, setAuthState, navigate }) {
+export default function SigninForm({ setUser, setAuthState }) {
+  const navigate = useNavigate();
+
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
@@ -38,6 +41,11 @@ export default function SigninForm({ setUser, setAuthState, navigate }) {
     // Placeholder for showing a modal or navigating to a forgot password page
     // You can implement this based on your application's design
     console.log('Forgot Password clicked');
+  };
+
+  const handleSignUpRedirect = () => {
+    console.log('Sign up clicked')
+    navigate('/sign-up');
   };
 
   return (
@@ -104,7 +112,7 @@ export default function SigninForm({ setUser, setAuthState, navigate }) {
         <div className='mt-8 flex justify-center items-center'>
           <p className='font-medium text-base'>Don't have an account?</p>
           <button
-            onClick={() => setAuthState('signup')}
+           onClick={handleSignUpRedirect}
             className='ml-2 font-medium text-base text-blue-500'
           >
             Sign up
