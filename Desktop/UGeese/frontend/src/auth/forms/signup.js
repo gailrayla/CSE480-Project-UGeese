@@ -76,6 +76,7 @@ export default function SignUpForm({ setUser, setAuthState }) {
         if (result.success) {
             // User signed up successfully, you might want to perform additional actions
             console.log('Sign-up successful:', result.userData);
+            navigate('/home');
         } else {
             // Handle sign-up failure
             console.error('Sign-up failed:', result.error);
