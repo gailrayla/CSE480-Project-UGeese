@@ -18,7 +18,7 @@ export default function SignUpForm({ setUser, setAuthState }) {
       }) => {
         try {
           const response = await fetch('http://localhost:5001/user/signup', {
-            method: 'POST',
+            method: 'POST',  
             headers: {
               'Content-Type': 'application/json',
             },
@@ -125,12 +125,20 @@ export default function SignUpForm({ setUser, setAuthState }) {
                 </div>
             </div>
             <div className='mt-8 flex justify-center items-center'>
-                <button
-                    onClick={handleSignUp}
-                    className='w-full active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out transform py-4 bg-blue-500 rounded-xl text-white font-bold text-lg'
-                >
-                    Sign up
-                </button>
+            <button
+    onClick={() => signUpApiCall({
+        firstName,
+        lastName,
+        email,
+        password,
+        studentId,
+        department,
+    })}
+    className='w-full active:scale-[.98] active:duration-75 transition-all hover:scale-[1.01] ease-in-out transform py-4 bg-blue-500 rounded-xl text-white font-bold text-lg'
+>
+    Sign up
+</button>
+
             </div>
             <div className='mt-8 flex flex-col gap-y-4'>
                 <button
