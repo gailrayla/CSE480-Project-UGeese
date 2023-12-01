@@ -1,8 +1,8 @@
 // Avatars.js
 import React from 'react';
-import CivilEngineerGoose from '../assets/Goose1.svg';
-import DesignerGoose from '../assets/Goose2.svg';
-import BusinessGoose from '../assets/Goose3.svg';
+import CivilEngineerGoose from '../assets/Goose/Goose1.svg';
+import DesignerGoose from '../assets/Goose/Goose2.svg';
+import BusinessGoose from '../assets/Goose/Goose3.svg';
 
 const GooseAvatar = ({ name, size = 16 }) => {
   let avatarImage;

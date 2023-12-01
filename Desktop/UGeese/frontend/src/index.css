@@ -43,3 +43,6 @@ code {
 .sidebar-open .main-content {
   margin-left: 200px; /* Adjust the margin as needed */
 }
+.square-avatar {
+  height: 100%;
+}

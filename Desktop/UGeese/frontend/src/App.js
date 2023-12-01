@@ -6,6 +6,7 @@ import SignUpForm from './auth/forms/signup';
 import Sidebar from './shared/sidebar';
 import SettingsPage from './shared/SettingsPage';
 import StorePage from './shared/StorePage';
+import Achievements from './shared/Achievements';
 
 import Button from './components/Button';
 import CountdownAnimation from './components/CountdownAnimation'; // Adjust the import path
@@ -138,6 +139,7 @@ function App() {
               }
             />
             <Route path="/store" element={<StorePage />} />
+            <Route path="/achievements" element={<Achievements />} />
           </Routes>
         </div>
       </div>
