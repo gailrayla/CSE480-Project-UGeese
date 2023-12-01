@@ -93,7 +93,7 @@ const AuthForm = ({ children }) => {
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
-  const [authState, setAuthState] = useState(''); // Add this line
+  const [authState, setAuthState] = useState(''); 
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
@@ -112,15 +112,13 @@ function App() {
   const isAuthRoute =
     location.pathname === '/sign-in' || location.pathname === '/sign-up';
 
-  const handleLogin = () => {
+    const [user, setUser] = useState(null);
+  
+    const handleLogin = () => {
     setAuthState('login');
     navigate('/sign-in');
   };
 
-  const handleSignUp = () => {
-    setAuthState('signup');
-    navigate('/sign-up');
-  };
 
   return (
     <div>
@@ -133,11 +131,11 @@ function App() {
           <Routes>
             <Route
               path="/sign-in"
-              element={<AuthForm><SigninForm setAuthState={setAuthState} /></AuthForm>}
+              element={<AuthForm><SigninForm setUser={setUser} setAuthState={setAuthState} /></AuthForm>}
             />
             <Route
               path="/sign-up"
-              element={<AuthForm><SignUpForm setAuthState={setAuthState} /></AuthForm>}
+              element={<AuthForm><SignUpForm setUser={setUser} setAuthState={setAuthState} /></AuthForm>}
             />
             <Route
               path="/home"
