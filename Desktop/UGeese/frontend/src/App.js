@@ -3,8 +3,10 @@ import React, {useState, useEffect, useContext } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import SigninForm from './auth/forms/signin';
 import SignUpForm from './auth/forms/signup';
+
 import Sidebar from './shared/sidebar';
 import SettingsPage from './shared/SettingsPage';
+import StorePage from './shared/StorePage';
 
 import Button from './components/Button';
 import CountdownAnimation from './components/CountdownAnimation'; // Adjust the import path
@@ -74,7 +76,7 @@ const Home = () => {
             <SetPomodoro />
           )}
         </div>
-      );
+      );      
     };
   
     // Assuming SigninForm and SignUpForm are similar components
@@ -136,6 +138,7 @@ function App() {
                 )
               }
             />
+            <Route path="/store" element={<StorePage />} />
           </Routes>
         </div>
       </div>
