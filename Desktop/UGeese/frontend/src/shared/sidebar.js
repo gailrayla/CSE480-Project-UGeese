@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FaBars, FaUser, FaCog, FaChartBar, FaShoppingCart } from 'react-icons/fa';
+import { Link, useNavigate} from 'react-router-dom';
+import { FaBars, FaUser, FaCog, FaChartBar, FaShoppingCart, FaTrophy, FaClock, FaSignOutAlt } from 'react-icons/fa';
 
 const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings, handleLogout }) => {
   const navigate = useNavigate();
