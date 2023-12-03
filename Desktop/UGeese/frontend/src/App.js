@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext } from 'react';
 
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import SigninForm from './auth/forms/signin';
 import SignUpForm from './auth/forms/signup';
 
@@ -13,6 +13,7 @@ import Button from './components/Button';
 import CountdownAnimation from './components/CountdownAnimation'; // Adjust the import path
 import SetPomodoro from './components/SetPomodoro'; // Adjust the import path
 import { SettingsContext } from './context/settingsContext';
+
 
 const Home = () => {
 
@@ -93,6 +94,8 @@ const AuthForm = ({ children }) => {
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isSettingsOpen, setSettingsOpen] = useState(false);
+  const [authState, setAuthState] = useState(''); 
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
@@ -110,20 +113,44 @@ function App() {
   const isAuthRoute =
     location.pathname === '/sign-in' || location.pathname === '/sign-up';
 
+    const [user, setUser] = useState(null);
+  
+    const handleLogin = () => {
+    setAuthState('login');
+    navigate('/sign-in');
+  };
+
+  const handleLogout = () => {
+    // Assuming you have a state variable to manage authentication state
+    setAuthState('logged out');
+
+    setUser(null);
+
+    // Redirect to the sign-in page
+    navigate('/sign-in');
+  };
+
   return (
     <div>
       <div className={`flex ${isSidebarOpen ? 'sidebar-open' : ''}`}>
-        {!isAuthRoute && <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} openSettings={openSettings} />}
+        {!isAuthRoute && (
+          <Sidebar
+            toggleSidebar={toggleSidebar}
+            isSidebarOpen={isSidebarOpen}
+            openSettings={openSettings}
+            handleLogout={handleLogout} // Pass the handleLogout function
+          />
+        )}
 
         <div className="main-content flex-1">
           <Routes>
             <Route
               path="/sign-in"
-              element={<AuthForm><SigninForm /></AuthForm>}
+              element={<AuthForm><SigninForm setUser={setUser} setAuthState={setAuthState} /></AuthForm>}
             />
             <Route
               path="/sign-up"
-              element={<AuthForm><SignUpForm /></AuthForm>}
+              element={<AuthForm><SignUpForm setUser={setUser} setAuthState={setAuthState} /></AuthForm>}
             />
             <Route
               path="/home"
