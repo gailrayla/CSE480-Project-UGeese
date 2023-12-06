@@ -15,22 +15,102 @@ import SetPomodoro from './components/SetPomodoro'; // Adjust the import path
 import { SettingsContext } from './context/settingsContext';
 
 
-const Home = () => {
-
+const Home = ({user}) => {
   const {
     pomodoro,
     executing,
     startAnimate,
     children,
-    startTimer,
-    pauseTimer,
     updateExecute,
     setCurrentTimer,
-    SettingsBtn } = useContext(SettingsContext)
+    SettingsBtn,
+    startTimer,
+    pauseTimer,
+    newTimer,
+    sessionId,
+    setSessionId,
+    isSessionActive,
+    handleEndSession,
+    updateSession,
+    // setSessionId,
+  } = useContext(SettingsContext);
 
-    useEffect(() => {
-        updateExecute(executing);
-      }, [executing, startAnimate, updateExecute]);
+  const [sessionStarted, setSessionStarted] = useState(false);
+
+  console.log('User in Home:', user);
+
+const handleStartSession = async () => {
+  try {
+    console.log('User before authentication check:', user);
+    console.log('User ID type:', typeof user?.id, 'User ID value:', user?.id);
+    console.log('Authentication check conditions:', !user, !user?.id);
+
+    const expectedDuration = executing[newTimer.active];
+
+    // Ensure user is authenticated and user data is available
+    if (!user?.id) {
+      console.error('User not authenticated');
+      return;
+    }
+
+    console.log('Expected Duration:', expectedDuration); // Log here to ensure it's defined
+    
+    console.log('Before API call');
+    
+    const response = await fetch('http://localhost:5001/focus/start', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        startTime: new Date(),
+        participants: [user.id],
+        expectedDuration: expectedDuration,
+      }),
+    });
+
+    console.log('After API call');
+
+    console.log('API Response:', response);
+
+    if (response.ok) {
+      const sessionStartedNow = response.status === 201;
+    
+      if (sessionStartedNow) {
+        const sessionData = await response.json();
+        const sessionId = sessionData.sessionId;
+        updateSession(sessionData);
+  
+        console.log('Session Data:', sessionData);
+        console.log('Session ID before startTimer:', sessionId);
+  
+        setSessionStarted(true);
+  
+        // Pass sessionId directly to handleEndSession
+        startTimer(sessionId);
+        console.log('Session successfully started');
+      } else {
+        console.error('Failed to start session');
+      }
+    } else {
+      console.error('Failed to start session. Response:', response.status, response.statusText);
+    }
+    } catch (error) {
+    console.error('Error starting session:', error);
+  }
+};
+
+
+
+  useEffect(() => {
+    console.log('Component re-rendered. sessionStarted:', sessionStarted);
+    console.log('User in useEffect:', user);
+    console.log('User ID type:', typeof user?.id, 'User ID value:', user?.id);
+  
+    updateExecute(executing);
+  }, [executing, startAnimate, updateExecute, sessionStarted, user]);
+  
+  
       
       return (
         <div className="container">
@@ -68,16 +148,23 @@ const Home = () => {
                     key={pomodoro}
                     timer={pomodoro}
                     animate={startAnimate}
+                    sessionId={sessionId}
+                    onComplete={() => {
+                      console.log('sessionId in CountdownAnimation:', sessionId);
+                      console.log('Is sessionId defined?', sessionId !== null && sessionId !== undefined);
+                      handleEndSession(sessionId); // Make sure sessionId is defined and correct here
+                    }}
                   >
                     {children}
                   </CountdownAnimation>
+
                 </div>
               </div>
               <div className="button-wrapper">
                 <Button
                   title="Start"
                   activeClass={!startAnimate ? 'active' : undefined}
-                  _callback={startTimer}
+                  _callback={handleStartSession}
                 />
                 <Button
                   title="Pause"
@@ -128,9 +215,14 @@ function App() {
     const [user, setUser] = useState(null);
   
     const handleLogin = () => {
-    setAuthState('login');
-    navigate('/sign-in');
-  };
+      setAuthState('login');
+      console.log('Current user before navigation:', user);
+      navigate('/sign-in');
+      setTimeout(() => {
+        console.log('User after navigation:', user);
+      }, 1000); // Adjust the delay as needed
+    };
+    
 
   const handleLogout = () => {
     // Assuming you have a state variable to manage authentication state
@@ -166,7 +258,7 @@ function App() {
             />
             <Route
               path="/home"
-              element={<Home openSettings={openSettings} />}
+              element={<Home user={user} openSettings={openSettings} />}
             />
             <Route
               path="/settings"

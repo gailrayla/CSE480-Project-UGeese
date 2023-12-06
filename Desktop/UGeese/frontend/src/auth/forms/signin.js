@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function SigninForm({ setUser, setAuthState }) {
   const navigate = useNavigate();
 
@@ -9,27 +10,27 @@ export default function SigninForm({ setUser, setAuthState }) {
 
   const handleSignIn = async () => {
     try {
-      // Placeholder for sign-in logic
       const response = await signInApiCall({ email, password });
-
-      // Check if the sign-in was successful (adjust according to your API response)
+  
       if (response.success) {
-        // Assuming the response includes user data
-        setUser(response.userData);
-
-        // Set authentication state to 'authenticated'
+        // Update the 'user' state with the 'id' property
+        setUser({
+          ...response.userData,
+          id: response.userData._id,
+        });
+  
         setAuthState('authenticated');
-
         navigate('/home');
-
+        console.log('User set:', response.userData);
       } else {
-        // Handle sign-in failure (show error message, etc.)
         console.error('Sign-in failed:', response.error);
       }
     } catch (error) {
       console.error('Error during sign-in:', error);
     }
   };
+  
+  
 
   const handleGoogleSignIn = async () => {
     // Placeholder for Google sign-in logic
@@ -55,15 +56,19 @@ export default function SigninForm({ setUser, setAuthState }) {
         Welcome back! Please enter your details.
       </p>
       <div className='mt-8'>
-        <div className='flex flex-col'>
-          <label className='text-lg font-medium'>Email</label>
-          <input
-            className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
-            placeholder='Enter your email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+      <div className='flex flex-col'>
+  <label className='text-lg font-medium' htmlFor='email'>
+    Email
+  </label>
+  <input
+    id='email'  // Add this 'id' attribute
+    className='w-full border-2 border-gray-100 rounded-xl p-4 mt-1 bg-transparent'
+    placeholder='Enter your email'
+    value={email}
+    onChange={(e) => setEmail(e.target.value)}
+  />
+</div>
+
         <div className='flex flex-col mt-4'>
           <label className='text-lg font-medium'>Password</label>
           <input

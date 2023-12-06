@@ -13,30 +13,13 @@ const SetPomodoro = () => {
     const {updateExecute} = useContext(SettingsContext)
 
     const handleChange = input => {
-        const { name, value } = input.target
-        switch (name) {
-            case 'work':
-                setNewTimer({
-                    ...newTimer,
-                    work: parseInt(value)
-                })
-                break;
-            case 'shortBreak':
-                setNewTimer({
-                    ...newTimer,
-                    short: parseInt(value)
-                })
-                break;
-            case 'longBreak':
-                setNewTimer({
-                    ...newTimer,
-                    long: parseInt(value)
-                })
-                break;
-            default:
-                break;
-        }
-    }
+        const { name, value } = input.target;
+        updateExecute({
+          ...newTimer,
+          [name]: parseInt(value)
+        });
+      };
+      
     const handleSubmit = e => {
         e.preventDefault()
         updateExecute(newTimer)
