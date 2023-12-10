@@ -8,8 +8,9 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="settings-page">
-      <h1 className="text-2xl font-bold mb-4">Settings</h1>
+    <div className="settings-page" style={{ padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <h1 style={{ color: 'var(--primary)', fontSize: '3rem', marginBottom: '48px' }}>Settings</h1>
+
 
       <div className="grid grid-cols-4 gap-4">
         {/* Left Side - Options */}
