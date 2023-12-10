@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate} from 'react-router-dom';
-import { FaBars, FaUser, FaCog, FaChartBar, FaShoppingCart, FaTrophy, FaClock, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaUser, FaCog, FaChartBar, FaShoppingCart, FaTrophy, FaClock, FaSignOutAlt, FaHome } from 'react-icons/fa';
 
 const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings, handleLogout }) => {
   const navigate = useNavigate();
@@ -8,7 +8,6 @@ const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings, handleLogout }) =
   const handleLogoutClick = () => {
     // Perform any additional logout logic here
     handleLogout();
-
     // Redirect to the sign-in page
     navigate('/sign-in');
   };
@@ -22,11 +21,17 @@ const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings, handleLogout }) =
       <nav className={`mt-5 ${isSidebarOpen ? 'block' : 'hidden'}`}>
         <ul className="space-y-2">
           {/* Existing items */}
-          <li>
+          {/* <li>
             <a href="/profile" className="flex items-center p-2 hover:bg-yellow-400">
               <FaUser className="mr-2 text-black" />
               Profile
             </a>
+          </li> */}
+          <li>
+            <Link to="/home" className="flex items-center p-2 hover:bg-yellow-400" >
+              <FaHome className="mr-2 text-black" />
+              Home
+            </Link>
           </li>
           <li>
             <Link to="/settings" className="flex items-center p-2 hover:bg-yellow-400" onClick={openSettings}>
@@ -47,14 +52,14 @@ const Sidebar = ({ toggleSidebar, isSidebarOpen, openSettings, handleLogout }) =
             </a>
           </li>
           {/* New items for achievements and Top Goose Pomodorks */}
-          <li>
+          {/* <li>
             <a href="/achievements" className="flex items-center p-2 hover:bg-yellow-400">
               <FaTrophy className="mr-2 text-black" />
               Achievements
             </a>
-          </li>
+          </li> */}
           <li>
-            <a href="/top-goose-pomodorks" className="flex items-center p-2 hover:bg-yellow-400">
+            <a href="/ranks" className="flex items-center p-2 hover:bg-yellow-400">
               <FaClock className="mr-2 text-black" />
               Top Goose Pomodorks
             </a>

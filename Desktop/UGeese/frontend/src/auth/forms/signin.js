@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -32,11 +33,36 @@ export default function SigninForm({ setUser, setAuthState }) {
   
   
 
-  const handleGoogleSignIn = async () => {
-    // Placeholder for Google sign-in logic
-    // You can implement this part based on your application's requirements
-    console.log('Google Sign In clicked');
-  };
+  const handleGoogleSignIn = () => {
+    console.log('Google Sign in clicked');
+    window.location.href = 'http://localhost:5001/auth/google';
+};
+
+// const handleGoogleSignInCallback = async () => {
+//   try {
+//     // Make a request to your server to fetch user data after Google OAuth
+//     const response = await fetch('http://localhost:5001/auth/google/callback', {
+//       method: 'GET',
+//       credentials: 'include', // Include credentials for cross-origin requests
+//     });
+
+//     if (response.ok) {
+//       const userData = await response.json();
+//       setUser(userData);
+//       navigate('/home');
+//     } else {
+//       console.error('Failed to fetch user data after Google OAuth:', response.statusText);
+//     }
+//   } catch (error) {
+//     console.error('Error during Google OAuth callback:', error);
+//   }
+// };
+
+// // Call handleGoogleSignInCallback when the component mounts
+// useEffect(() => {
+//   handleGoogleSignInCallback();
+// }, []);
+
 
   const handleForgotPassword = () => {
     // Placeholder for showing a modal or navigating to a forgot password page

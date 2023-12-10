@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Session = require('../models/Session');
+const User = require('../models/User');
 
 // GET API
 router.get('/:sessionId', async (req, res) => {
@@ -31,6 +32,12 @@ router.post('/start', async (req, res) => {
       expectedDuration,
     });
 
+    // Add the new session's ID to the participants' sessions array
+    await User.updateMany(
+      { _id: { $in: participants } },
+      { $push: { sessions: newSession._id } }
+    );
+
     // Return only the session ID in the response
     res.status(201).json({ sessionId: newSession._id });
   } catch (error) {
@@ -41,7 +48,7 @@ router.post('/start', async (req, res) => {
 
 
 
-// PUT
+
 // PUT
 router.put('/:sessionId', async (req, res) => {
   console.log('Received endFocusSession request', req.body);
@@ -64,8 +71,12 @@ router.put('/:sessionId', async (req, res) => {
 
     // Check if the actual duration matches the expected duration
     if (session.duration === session.expectedDuration) {
-      // Increment completedTimers
+      // Increment completedTimers for the session
       session.incrementCompletedTimers();
+
+      // Find the associated user and update completedTimers
+      const userId = session.participants[0]; // Assuming participants contain user IDs
+      const user = await User.findByIdAndUpdate(userId, { $inc: { completedTimers: 1 } }, { new: true });
     }
 
     // Save the changes to the database
@@ -77,7 +88,6 @@ router.put('/:sessionId', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 
 // DELETE
 router.delete('/:sessionId', async (req, res) => {

@@ -85,8 +85,11 @@ export default function SignUpForm({ setUser, setAuthState }) {
 
 
     const handleGoogleSignUp = () => {
-        // Add Google sign-up logic here
+        console.log('Google Sign up clicked');
+        window.location.href = 'http://localhost:5001/auth/google'
+       // GoogleApiCall();
     };
+    
 
     const handleLogin = () => {
         console.log('Login button clicked');

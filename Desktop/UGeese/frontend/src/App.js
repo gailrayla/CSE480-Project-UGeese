@@ -8,6 +8,11 @@ import Sidebar from './shared/sidebar';
 import SettingsPage from './shared/SettingsPage';
 import StorePage from './shared/StorePage';
 import Achievements from './shared/Achievements';
+import Stats from './stats';
+import Store from './store';
+import Ranks from './ranks';
+import CoinCounter from './CoinCounter';
+
 
 import Button from './components/Button';
 import CountdownAnimation from './components/CountdownAnimation'; // Adjust the import path
@@ -36,6 +41,7 @@ const Home = ({user}) => {
   } = useContext(SettingsContext);
 
   const [sessionStarted, setSessionStarted] = useState(false);
+  const [coins, setCoins] = useState(200);
 
   console.log('User in Home:', user);
 
@@ -144,19 +150,34 @@ const handleStartSession = async () => {
               <Button title="Set Session" _callback={SettingsBtn} />
               <div className="timer-container">
                 <div className="time-wrapper">
-                  <CountdownAnimation
-                    key={pomodoro}
-                    timer={pomodoro}
-                    animate={startAnimate}
-                    sessionId={sessionId}
-                    onComplete={() => {
-                      console.log('sessionId in CountdownAnimation:', sessionId);
-                      console.log('Is sessionId defined?', sessionId !== null && sessionId !== undefined);
-                      handleEndSession(sessionId); // Make sure sessionId is defined and correct here
-                    }}
-                  >
-                    {children}
-                  </CountdownAnimation>
+                <CountdownAnimation
+                key={pomodoro}
+                timer={pomodoro}
+                animate={startAnimate}
+                sessionId={sessionId}
+                onComplete={async () => {
+                  console.log('sessionId in CountdownAnimation:', sessionId);
+                  console.log('Is sessionId defined?', sessionId !== null && sessionId !== undefined);
+
+                  try {
+                    const sessionData = await handleEndSession(sessionId);
+                    console.log('Session Data after completion:', sessionData);
+                    if (sessionData && sessionData.status === 'completed') {
+                      console.log('Completed Timers:', sessionData.completedTimers); 
+                      // Session has completed, update coins
+                      if (sessionData.completedTimers === 1) {
+                        setCoins(200);
+                      } else {
+                        setCoins(coins + 50);
+                      }
+                    }
+                  } catch (error) {
+                    console.error('Error updating coins:', error);
+                  }
+                }}
+              >
+                {children}
+              </CountdownAnimation>
 
                 </div>
               </div>
@@ -176,6 +197,7 @@ const handleStartSession = async () => {
           ) : (
             <SetPomodoro />
           )}
+          <CoinCounter coins={coins} />
         </div>
       );      
     };
@@ -222,7 +244,8 @@ function App() {
         console.log('User after navigation:', user);
       }, 1000); // Adjust the delay as needed
     };
-    
+
+  
 
   const handleLogout = () => {
     // Assuming you have a state variable to manage authentication state
@@ -270,8 +293,14 @@ function App() {
                 )
               }
             />
-            <Route path="/store" element={<StorePage />} />
-            <Route path="/achievements" element={<Achievements />} />
+            <Route
+              path="/stats"
+              element={<Stats />}
+            />
+            {/* <Route path="/store" element={<StorePage />} /> */}
+            <Route path="/store" element={<Store />} />
+            {/* <Route path="/achievements" element={<Achievements />} /> */}
+            <Route path="/ranks" element={<Ranks />} />
           </Routes>
         </div>
       </div>

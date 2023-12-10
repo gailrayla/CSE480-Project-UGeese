@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const focusSessionSchema = new mongoose.Schema({
   startTime: { type: Date, required: true },
   endTime: { type: Date },
-  participants: { type: [String], required: true }, // Assuming it's the user ID
+  participants: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   status: { type: String, default: 'active' },
   completedTimers: { type: Number, default: 0 },
   duration: { type: Number, default: 0 },
-  expectedDuration: { type: Number, required: true }, // Add this line
+  expectedDuration: { type: Number, required: true },
 });
 
 
