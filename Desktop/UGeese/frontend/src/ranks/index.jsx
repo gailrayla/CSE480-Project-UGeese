@@ -30,7 +30,7 @@ import React, { useEffect, useState } from 'react';
    }, []);
    return (
      <div className='ranks'>
-         <h1>Top ranking players</h1>
+         <h1>Top ranking pomodorks</h1>
          <div
          id="scrollableDiv"
          style={{
