@@ -55,16 +55,19 @@ Welcome to the UGeese Productivity Web app! This project consists of a server an
 1. **Sign Up:**
    - Open your web browser and go to [http://localhost:3000/sign-up](http://localhost:3000/sign-up).
    - Manually register by filling out the form completely.
+   - Signing up with Google OAuth2.0 is also possible however it is being updated right now, so it might cause some minor issues!
    - After successful registration, you will be redirected to the home page at [http://localhost:3000/home](http://localhost:3000/home).
 
 2. **Log In:**
    - Alternatively, if you have an account, you can log in at [http://localhost:3000/login](http://localhost:3000/login).
    - Use the email and password you set during registration.
+   - Logging in with Google OAuth2.0 is also possible however it is being updated right now, so it might cause some minor issues!
    - After logging in, you will be redirected to the home page.
 
 3. **Session:**
    - On the home page, set up your study session by specifying the duration of focus, short break, and long break.
    - Start the session.
+   - Once the session successfully ends, you gain a completed timer which will be rewarded by coins. 
 
 4. **Navigation:**
    - Explore other pages such as Settings, Store, Statistics, and Top Goose Pomodorks. Note that these pages are still being updated.
